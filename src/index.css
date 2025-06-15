@@ -42,11 +42,74 @@
     button, a, input, select {
       @apply min-h-[44px] min-w-[44px];
     }
+    
+    /* Miglioramenti specifici per iOS */
+     input[type="number"] {
+       -webkit-appearance: none;
+       -moz-appearance: textfield;
+       font-size: 16px; /* Previene zoom automatico su iOS */
+     }
+     
+     input[type="number"]::-webkit-outer-spin-button,
+     input[type="number"]::-webkit-inner-spin-button {
+       -webkit-appearance: none;
+       margin: 0;
+     }
+     
+     /* Miglioramenti per input e select */
+     input, select, textarea {
+       font-size: 16px; /* Previene zoom automatico su iOS */
+       -webkit-tap-highlight-color: transparent;
+     }
+     
+     /* Classe per elementi touch-friendly */
+     .touch-manipulation {
+       touch-action: manipulation;
+       -webkit-tap-highlight-color: transparent;
+       user-select: none;
+       -webkit-user-select: none;
+     }
   }
 }
 
-/* Animazioni ottimizzate */
+/* Slider personalizzati per iOS */
 @layer components {
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+  
+  .slider::-webkit-slider-track {
+    @apply bg-gray-200 dark:bg-gray-600 rounded-lg h-2;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    @apply h-5 w-5 rounded-full bg-primary-500 cursor-pointer shadow-lg;
+    border: 2px solid white;
+  }
+  
+  .slider::-moz-range-track {
+    @apply bg-gray-200 dark:bg-gray-600 rounded-lg h-2 border-0;
+  }
+  
+  .slider::-moz-range-thumb {
+    @apply h-5 w-5 rounded-full bg-primary-500 cursor-pointer shadow-lg border-0;
+    border: 2px solid white;
+  }
+  
+  .slider:focus {
+    outline: none;
+  }
+  
+  .slider:focus::-webkit-slider-thumb {
+    @apply ring-2 ring-primary-300;
+  }
+
+/* Animazioni ottimizzate */
   .animate-slideInUp,
   .animate-slide-up {
     animation: slideUp 0.3s ease-out;

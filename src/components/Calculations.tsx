@@ -224,45 +224,145 @@ export const Calculations: React.FC = () => {
           </div>
           
           <div>
-            <label htmlFor="laf" className="block text-sm font-medium text-sage-700 mb-2">LAF</label>
-            <input
-              type="number"
-              id="laf"
-              value={data.laf || ''}
-              onChange={(e) => {
-                const value = parseFloat(e.target.value);
-                // Limita il valore tra 1.45 e 2.1
-                const validValue = Math.min(Math.max(value, 1.45), 2.1);
-                // Arrotonda a incrementi di 0.05
-                const roundedValue = Math.round(validValue * 20) / 20;
-                setData({...data, laf: roundedValue});
-              }}
-              step="0.05"
-              min="1.45"
-              max="2.1"
-              className="w-full px-4 py-3 border border-sage-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/60 shadow-sm focus:shadow-md text-sm sm:text-base"
-              placeholder="LAF"
-            />
+            <label htmlFor="laf" className="block text-sm font-medium text-sage-700 dark:text-gray-300 mb-2">LAF (Livello Attività Fisica)</label>
+            <div className="space-y-3">
+              {/* Input numerico per desktop */}
+              <input
+                type="number"
+                id="laf"
+                value={data.laf || ''}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value);
+                  const validValue = Math.min(Math.max(value, 1.45), 2.1);
+                  const roundedValue = Math.round(validValue * 20) / 20;
+                  setData({...data, laf: roundedValue});
+                }}
+                step="0.05"
+                min="1.45"
+                max="2.1"
+                className="w-full px-4 py-3 border border-sage-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/60 shadow-sm focus:shadow-md text-sm sm:text-base dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                placeholder="LAF"
+              />
+              
+              {/* Controlli touch-friendly per mobile */}
+              <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-700 rounded-xl p-3 sm:hidden">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newValue = Math.max(1.45, Math.round((data.laf - 0.05) * 20) / 20);
+                    setData({...data, laf: newValue});
+                  }}
+                  className="w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold text-lg hover:bg-primary-600 transition-colors"
+                >
+                  −
+                </button>
+                <div className="flex-1 mx-4">
+                  <input
+                    type="range"
+                    min="1.45"
+                    max="2.1"
+                    step="0.05"
+                    value={data.laf}
+                    onChange={(e) => {
+                      const value = parseFloat(e.target.value);
+                      setData({...data, laf: value});
+                    }}
+                    className="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer slider"
+                  />
+                  <div className="text-center mt-1 text-sm font-medium text-sage-700 dark:text-gray-300">{data.laf}</div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newValue = Math.min(2.1, Math.round((data.laf + 0.05) * 20) / 20);
+                    setData({...data, laf: newValue});
+                  }}
+                  className="w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold text-lg hover:bg-primary-600 transition-colors"
+                >
+                  +
+                </button>
+              </div>
+              
+              {/* Indicatori di livello */}
+              <div className="text-xs text-sage-600 dark:text-gray-400 space-y-1">
+                <div className="flex justify-between">
+                  <span>Sedentario: 1.45-1.55</span>
+                  <span>Attivo: 1.85-2.1</span>
+                </div>
+              </div>
+            </div>
           </div>
           
           <div>
-            <label htmlFor="y" className="block text-sm font-medium text-sage-700 mb-2">Grammi proteici per kg</label>
-            <input
-              type="number"
-              id="y"
-              value={data.y || ''}
-              onChange={(e) => {
-                const value = parseFloat(e.target.value);
-                // Limita il valore tra 0.8 e 3
-                const validValue = Math.min(Math.max(value, 0.8), 3);
-                setData({...data, y: validValue});
-              }}
-              step="0.1"
-              min="0.8"
-              max="3"
-              className="w-full px-4 py-3 border border-sage-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/60 shadow-sm focus:shadow-md text-sm sm:text-base"
-              placeholder="Grammi proteici per kg"
-            />
+            <label htmlFor="y" className="block text-sm font-medium text-sage-700 dark:text-gray-300 mb-2">Proteine (g/kg peso corporeo)</label>
+            <div className="space-y-3">
+              {/* Input numerico per desktop */}
+              <input
+                type="number"
+                id="y"
+                value={data.y || ''}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value);
+                  const validValue = Math.min(Math.max(value, 0.8), 3);
+                  setData({...data, y: validValue});
+                }}
+                step="0.1"
+                min="0.8"
+                max="3"
+                className="w-full px-4 py-3 border border-sage-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/60 shadow-sm focus:shadow-md text-sm sm:text-base dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                placeholder="Grammi proteici per kg"
+              />
+              
+              {/* Controlli touch-friendly per mobile */}
+              <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-700 rounded-xl p-3 sm:hidden">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newValue = Math.max(0.8, Math.round((data.y - 0.1) * 10) / 10);
+                    setData({...data, y: newValue});
+                  }}
+                  className="w-10 h-10 bg-accent-500 text-white rounded-full flex items-center justify-center font-bold text-lg hover:bg-accent-600 transition-colors"
+                >
+                  −
+                </button>
+                <div className="flex-1 mx-4">
+                  <input
+                    type="range"
+                    min="0.8"
+                    max="3"
+                    step="0.1"
+                    value={data.y}
+                    onChange={(e) => {
+                      const value = parseFloat(e.target.value);
+                      setData({...data, y: value});
+                    }}
+                    className="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer slider"
+                  />
+                  <div className="text-center mt-1 text-sm font-medium text-sage-700 dark:text-gray-300">{data.y} g/kg</div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newValue = Math.min(3, Math.round((data.y + 0.1) * 10) / 10);
+                    setData({...data, y: newValue});
+                  }}
+                  className="w-10 h-10 bg-accent-500 text-white rounded-full flex items-center justify-center font-bold text-lg hover:bg-accent-600 transition-colors"
+                >
+                  +
+                </button>
+              </div>
+              
+              {/* Indicatori di livello */}
+              <div className="text-xs text-sage-600 dark:text-gray-400 space-y-1">
+                <div className="flex justify-between">
+                  <span>Sedentario: 0.8-1.0</span>
+                  <span>Sportivo: 1.6-2.2</span>
+                </div>
+                <div className="text-center">
+                  <span>Atleta: 2.0-3.0</span>
+                </div>
+              </div>
+            </div>
           </div>
           
           <div>

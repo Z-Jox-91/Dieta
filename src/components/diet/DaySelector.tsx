@@ -8,18 +8,19 @@ interface DaySelectorProps {
 
 export const DaySelector: React.FC<DaySelectorProps> = ({ days, selectedDay, onDaySelect }) => {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="grid grid-cols-7 gap-2 sm:flex sm:flex-wrap">
       {days.map((day, index) => (
         <button
           key={index}
           onClick={() => onDaySelect(index)}
-          className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+          className={`px-3 py-3 sm:px-4 sm:py-2 rounded-xl font-medium transition-all duration-200 touch-manipulation min-h-[48px] sm:min-h-[40px] flex items-center justify-center text-sm sm:text-base ${
             selectedDay === index
-              ? 'bg-gradient-to-r from-primary-500 to-accent-500 text-white shadow-md'
-              : 'bg-sage-100 text-sage-700 hover:bg-sage-200'
+              ? 'bg-gradient-to-r from-primary-500 to-accent-500 text-white shadow-lg transform scale-105'
+              : 'bg-sage-100 dark:bg-gray-700 text-sage-700 dark:text-gray-300 hover:bg-sage-200 dark:hover:bg-gray-600 hover:shadow-md'
           }`}
         >
-          {day.substring(0, 3)}
+          <span className="sm:hidden">{day.substring(0, 3)}</span>
+          <span className="hidden sm:inline">{day.substring(0, 3)}</span>
         </button>
       ))}
     </div>

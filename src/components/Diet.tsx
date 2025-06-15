@@ -133,33 +133,34 @@ export const Diet: React.FC = () => {
   return (
     <div className="space-y-8">
       {/* Week Navigation */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-white/20 dark:border-gray-700/20">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-4 sm:space-y-0">
           <div className="flex items-center space-x-3">
-            <Calendar className="w-6 h-6 text-primary-600" />
-            <h2 className="text-xl font-bold text-sage-900">Piano Alimentare</h2>
+            <Calendar className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+            <h2 className="text-lg sm:text-xl font-bold text-sage-900 dark:text-white">Piano Alimentare</h2>
           </div>
           
-          <div className="flex items-center space-x-4">
+          {/* Controlli navigazione settimana ottimizzati per mobile */}
+          <div className="flex items-center justify-center space-x-2 sm:space-x-4">
             <button
               onClick={() => setCurrentWeek(prev => prev - 1)}
-              className="p-2 text-sage-600 hover:text-sage-900 hover:bg-sage-100 rounded-lg transition-colors duration-200"
+              className="flex items-center justify-center w-12 h-12 sm:w-10 sm:h-10 text-sage-600 dark:text-gray-300 hover:text-sage-900 dark:hover:text-white hover:bg-sage-100 dark:hover:bg-gray-700 rounded-xl transition-colors duration-200 touch-manipulation"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-6 h-6 sm:w-5 sm:h-5" />
             </button>
             
-            <div className="text-center">
-              <p className="text-sm font-medium text-sage-900">
+            <div className="text-center px-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-xl min-w-[140px]">
+              <p className="text-sm font-medium text-sage-900 dark:text-white">
                 Settimana {currentWeek === 0 ? 'corrente' : currentWeek > 0 ? `+${currentWeek}` : currentWeek}
               </p>
-              <p className="text-xs text-sage-600">{formatWeekRange()}</p>
+              <p className="text-xs text-sage-600 dark:text-gray-400">{formatWeekRange()}</p>
             </div>
             
             <button
               onClick={() => setCurrentWeek(prev => prev + 1)}
-              className="p-2 text-sage-600 hover:text-sage-900 hover:bg-sage-100 rounded-lg transition-colors duration-200"
+              className="flex items-center justify-center w-12 h-12 sm:w-10 sm:h-10 text-sage-600 dark:text-gray-300 hover:text-sage-900 dark:hover:text-white hover:bg-sage-100 dark:hover:bg-gray-700 rounded-xl transition-colors duration-200 touch-manipulation"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-6 h-6 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>
