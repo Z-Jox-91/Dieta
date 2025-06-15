@@ -60,6 +60,20 @@ export const FoodAutocomplete: React.FC<FoodAutocompleteProps> = ({ value, onCha
     }
   }, [value, selectedFood]);
 
+  // Ricalcola i valori nutrizionali quando cambiano i grammi
+  useEffect(() => {
+    if (selectedFood && grams > 0) {
+      const calculatedValues = {
+        calories: (selectedFood.calories / 100) * grams,
+        proteins: (selectedFood.proteins / 100) * grams,
+        carbs: (selectedFood.carbs / 100) * grams,
+        fats: (selectedFood.fats / 100) * grams,
+        category: selectedFood.category
+      };
+      onChange(selectedFood.name, calculatedValues);
+    }
+  }, [grams, selectedFood, onChange]);
+
   // Gestisce il click fuori dal componente per chiudere i suggerimenti
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

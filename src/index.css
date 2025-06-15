@@ -1,3 +1,272 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Stili base */
+@layer base {
+  :root {
+    --primary-color: 16 185 129;
+    --accent-color: 59 130 246;
+    --sage-color: 52 211 153;
+  }
+
+  body {
+    @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Scrollbar personalizzata */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-gray-500;
+  }
+
+  /* Comportamento scroll fluido */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Target touch migliorati per mobile */
+  @media (max-width: 640px) {
+    button, a, input, select {
+      @apply min-h-[44px] min-w-[44px];
+    }
+  }
+}
+
+/* Animazioni ottimizzate */
+@layer components {
+  .animate-slideInUp,
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .animate-fadeInScale {
+    animation: fadeInScale 0.3s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Effetti ottimizzati */
+  .glass {
+    @apply bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm;
+  }
+
+  .hover-card {
+    @apply transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md;
+  }
+
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1;
+  }
+}
+
+/* Accessibilità ottimizzata */
+@layer utilities {
+  .high-contrast {
+    --primary-color: 220 38 38;
+    --accent-color: 37 99 235;
+    --sage-color: 22 163 74;
+    @apply contrast-125;
+  }
+
+  .large-text {
+    font-size: 115%;
+    line-height: 1.4;
+  }
+
+  .large-text h1 { @apply text-3xl; }
+  .large-text h2 { @apply text-2xl; }
+  .large-text h3 { @apply text-2xl; }
+  .large-text p { @apply text-lg; }
+
+  /* Movimento ridotto - ottimizzato */
+  .reduced-motion * {
+    @apply transition-none animate-none;
+  }
+
+  /* Ottimizzazione screen reader */
+  .screen-reader {
+    @apply focus:not-sr-only focus:outline-2 focus:outline-primary-500;
+  }
+
+  .screen-reader-content {
+    @apply sr-only focus:not-sr-only;
+  }
+
+  /* Navigazione da tastiera - ottimizzata */
+  .keyboard-friendly:focus-visible {
+    @apply outline outline-2 outline-primary-500;
+  }
+
+  /* Dimensionamento responsive del testo */
+  .text-responsive {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+
+  .heading-responsive {
+    @apply text-xl sm:text-2xl lg:text-3xl;
+  }
+}
+
+/* Dark mode ottimizzato */
+@layer utilities {
+  .dark .dark-glass {
+    @apply bg-gray-800/70 backdrop-blur-md;
+  }
+
+  .dark .dark-hover:hover {
+    @apply bg-gray-700/40;
+  }
+
+  .dark .dark-border {
+    @apply border-gray-600;
+  }
+}
+
+/* Offline mode ottimizzato */
+@layer utilities {
+  .offline {
+    @apply opacity-60 cursor-not-allowed;
+  }
+
+  .offline-badge {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 text-red-700;
+  }
+
+  .offline-message {
+    @apply text-sm text-red-600;
+  }
+}
+
+/* Loading states ottimizzato */
+@layer utilities {
+  .loading {
+    @apply animate-pulse bg-gray-200;
+  }
+
+  .loading-text {
+    @apply inline-block h-4 bg-gray-200 rounded;
+  }
+
+  .loading-circle {
+    @apply rounded-full bg-gray-200;
+  }
+}
+
+/* Gamification ottimizzato */
+@layer utilities {
+  .achievement {
+    @apply flex items-center gap-3 p-3 rounded-lg bg-white border border-gray-200;
+  }
+
+  .achievement-icon {
+    @apply flex items-center justify-center w-10 h-10 rounded-full bg-primary-100 text-primary-600;
+  }
+
+  .achievement-locked {
+    @apply opacity-60;
+  }
+
+  .streak-counter {
+    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full bg-primary-100 text-primary-600;
+  }
+
+  .progress-bar {
+    @apply h-2 rounded-full bg-gray-200 overflow-hidden;
+  }
+
+  .progress-value {
+    @apply h-full bg-primary-500 rounded-full transition-all duration-200;
+  }
+}
+
+/* Notifiche ottimizzate */
+@layer utilities {
+  .notification {
+    @apply flex items-start gap-3 p-3 rounded-lg bg-white border border-gray-200 shadow-md;
+  }
+
+  .notification-icon {
+    @apply flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 text-primary-600;
+  }
+
+  .notification-content {
+    @apply flex-1 min-w-0;
+  }
+
+  .notification-actions {
+    @apply flex items-center gap-2 mt-3;
+  }
+}
+
+/* Stampa */
+@media print {
+  @page {
+    margin: 2cm;
+  }
+
+  body {
+    @apply text-black bg-white;
+  }
+
+  .no-print {
+    @apply hidden;
+  }
+
+  .print-only {
+    @apply block;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  table {
+    page-break-inside: avoid;
+  }
+}

@@ -50,7 +50,7 @@ export const Foods: React.FC = () => {
         const parsedFoods = JSON.parse(savedFoods);
         if (Array.isArray(parsedFoods)) {
           // Converti il formato esistente se necessario
-          const convertedFoods = parsedFoods.map((food: any, index: number) => ({
+          const convertedFoods = parsedFoods.map((food: Partial<FoodItem>, index: number) => ({
             id: food.id || `food_${index}`,
             name: food.name || '',
             category: food.category || calculateCategory(food.carbs || 0, food.proteins || 0, food.fats || 0),
@@ -102,7 +102,7 @@ export const Foods: React.FC = () => {
       const worksheet = workbook.Sheets[sheetName];
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-      const processedFoods: FoodItem[] = jsonData.map((row: any, index: number) => {
+      const processedFoods: FoodItem[] = jsonData.map((row: Record<string, unknown>, index: number) => {
         const carbs = parseFloat(row.carbs || row.carboidrati || 0);
         const proteins = parseFloat(row.proteins || row.proteine || 0);
         const fats = parseFloat(row.fats || row.lipidi || 0);
@@ -282,7 +282,7 @@ export const Foods: React.FC = () => {
           <div>
             <select
               value={filterCategory}
-              onChange={(e) => setFilterCategory(e.target.value as any)}
+              onChange={(e) => setFilterCategory(e.target.value as 'all' | 'CRB' | 'PRT' | 'LPD')}
               className="px-4 py-2 border border-sage-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             >
               <option value="all">Tutte le categorie</option>

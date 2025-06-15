@@ -31,6 +31,7 @@ interface DailyCalorieLimit {
 const daysOfWeek = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
 
 export const Calculations: React.FC = () => {
+  console.log('Calculations.tsx: component rendered');
   const [data, setData] = useState<CalculationData>({
     age: 0,
     height: 0,
@@ -47,20 +48,25 @@ export const Calculations: React.FC = () => {
   const [dailyCalorieLimits, setDailyCalorieLimits] = useState<DailyCalorieLimit>({});
 
   useEffect(() => {
+    console.log('Calculations.tsx: useEffect - loading data from localStorage');
     const saved = localStorage.getItem('bilanciamo_calculations');
     if (saved) {
+      console.log('Calculations.tsx: useEffect - found saved calculations', saved);
       const savedData = JSON.parse(saved);
       setData(savedData.data);
       setResults(savedData.results);
+      console.log('Calculations.tsx: useEffect - setData and setResults called with', savedData.data, savedData.results);
       setIsCalculated(true);
     }
     
     // Carica i limiti di calorie giornalieri
     const savedLimits = localStorage.getItem('bilanciamo_daily_limits');
     if (savedLimits) {
+      console.log('Calculations.tsx: useEffect - found saved daily limits', savedLimits);
       try {
         const parsedLimits = JSON.parse(savedLimits);
         setDailyCalorieLimits(parsedLimits);
+        console.log('Calculations.tsx: useEffect - setDailyCalorieLimits called with', parsedLimits);
       } catch (error) {
         console.error('Errore nel caricamento dei limiti giornalieri:', error);
         setDailyCalorieLimits({});
@@ -103,6 +109,7 @@ export const Calculations: React.FC = () => {
   };
 
   const handleCalculate = () => {
+    console.log('Calculations.tsx: handleCalculate called');
     const newResults = calculateResults();
     setResults(newResults);
     setIsCalculated(true);
@@ -114,6 +121,7 @@ export const Calculations: React.FC = () => {
   };
 
   const handleReset = () => {
+    console.log('Calculations.tsx: handleReset called');
     setData({
       age: 0,
       height: 0,
@@ -153,59 +161,62 @@ export const Calculations: React.FC = () => {
     return "Obesità di classe III";
   };
 
+  console.log('Calculations.tsx: rendering, data:', data, 'results:', results, 'isCalculated:', isCalculated);
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Input Form */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-        <div className="flex items-center space-x-3 mb-6">
-          <Calculator className="w-6 h-6 text-primary-600" />
-          <h2 className="text-xl font-bold text-sage-900">Dati Personali</h2>
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 lg:p-8 border border-white/20 shadow-lg">
+        <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-primary-500 to-accent-500 rounded-lg flex items-center justify-center">
+            <Calculator className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+          </div>
+          <h2 className="text-lg sm:text-xl font-bold text-sage-900">Dati Personali</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <div>
-            <label htmlFor="age" className="block text-sm font-medium text-sage-700 mb-1">Età</label>
+            <label htmlFor="age" className="block text-sm font-medium text-sage-700 mb-2">Età</label>
             <input
               type="number"
               id="age"
               value={data.age || ''}
               onChange={(e) => setData({...data, age: parseInt(e.target.value) || 0})}
-              className="w-full px-3 py-2 border border-sage-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-3 border border-sage-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/60 shadow-sm focus:shadow-md text-sm sm:text-base"
               placeholder="Anni"
             />
           </div>
           
           <div>
-            <label htmlFor="height" className="block text-sm font-medium text-sage-700 mb-1">Altezza</label>
+            <label htmlFor="height" className="block text-sm font-medium text-sage-700 mb-2">Altezza</label>
             <input
               type="number"
               id="height"
               value={data.height || ''}
               onChange={(e) => setData({...data, height: parseInt(e.target.value) || 0})}
-              className="w-full px-3 py-2 border border-sage-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-3 border border-sage-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/60 shadow-sm focus:shadow-md text-sm sm:text-base"
               placeholder="cm"
             />
           </div>
           
           <div>
-            <label htmlFor="weight" className="block text-sm font-medium text-sage-700 mb-1">Peso</label>
+            <label htmlFor="weight" className="block text-sm font-medium text-sage-700 mb-2">Peso</label>
             <input
               type="number"
               id="weight"
               value={data.weight || ''}
               onChange={(e) => setData({...data, weight: parseInt(e.target.value) || 0})}
-              className="w-full px-3 py-2 border border-sage-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-3 border border-sage-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/60 shadow-sm focus:shadow-md text-sm sm:text-base"
               placeholder="kg"
             />
           </div>
           
           <div>
-            <label htmlFor="gender" className="block text-sm font-medium text-sage-700 mb-1">Genere</label>
+            <label htmlFor="gender" className="block text-sm font-medium text-sage-700 mb-2">Genere</label>
             <select
               id="gender"
               value={data.gender}
               onChange={(e) => setData({...data, gender: e.target.value as 'female' | 'male'})}
-              className="w-full px-3 py-2 border border-sage-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-3 border border-sage-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/60 shadow-sm focus:shadow-md text-sm sm:text-base"
             >
               <option value="female">Donna</option>
               <option value="male">Uomo</option>
@@ -213,7 +224,7 @@ export const Calculations: React.FC = () => {
           </div>
           
           <div>
-            <label htmlFor="laf" className="block text-sm font-medium text-sage-700 mb-1">LAF</label>
+            <label htmlFor="laf" className="block text-sm font-medium text-sage-700 mb-2">LAF</label>
             <input
               type="number"
               id="laf"
@@ -229,13 +240,13 @@ export const Calculations: React.FC = () => {
               step="0.05"
               min="1.45"
               max="2.1"
-              className="w-full px-3 py-2 border border-sage-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-3 border border-sage-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/60 shadow-sm focus:shadow-md text-sm sm:text-base"
               placeholder="LAF"
             />
           </div>
           
           <div>
-            <label htmlFor="y" className="block text-sm font-medium text-sage-700 mb-1">Grammi proteici per kg</label>
+            <label htmlFor="y" className="block text-sm font-medium text-sage-700 mb-2">Grammi proteici per kg</label>
             <input
               type="number"
               id="y"
@@ -249,39 +260,43 @@ export const Calculations: React.FC = () => {
               step="0.1"
               min="0.8"
               max="3"
-              className="w-full px-3 py-2 border border-sage-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-3 border border-sage-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/60 shadow-sm focus:shadow-md text-sm sm:text-base"
               placeholder="Grammi proteici per kg"
             />
           </div>
           
           <div>
-            <label htmlFor="dailyDeficit" className="block text-sm font-medium text-sage-700 mb-1">Deficit Giornaliero</label>
+            <label htmlFor="dailyDeficit" className="block text-sm font-medium text-sage-700 mb-2">Deficit Giornaliero</label>
             <input
               type="number"
               id="dailyDeficit"
               value={data.dailyDeficit || ''}
               onChange={(e) => setData({...data, dailyDeficit: parseInt(e.target.value) || 0})}
-              className="w-full px-3 py-2 border border-sage-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-3 border border-sage-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white/60 shadow-sm focus:shadow-md text-sm sm:text-base"
               placeholder="kcal"
             />
           </div>
         </div>
         
-        <div className="mt-6 flex space-x-4">
+        <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
           <button
             onClick={handleCalculate}
             disabled={!isFormValid}
-            className={`px-4 py-2 rounded-md flex items-center space-x-2 ${isFormValid ? 'bg-primary-600 text-white hover:bg-primary-700' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+            className={`px-6 py-3 rounded-xl flex items-center justify-center space-x-2 font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base ${
+              isFormValid 
+                ? 'bg-gradient-to-r from-primary-500 to-accent-500 text-white hover:from-primary-600 hover:to-accent-600' 
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            }`}
           >
-            <Calculator className="w-5 h-5" />
+            <Calculator className="w-4 h-4 sm:w-5 sm:h-5" />
             <span>Calcola</span>
           </button>
           
           <button
             onClick={handleReset}
-            className="px-4 py-2 bg-white text-sage-700 rounded-md border border-sage-300 hover:bg-sage-50 flex items-center space-x-2"
+            className="px-6 py-3 bg-white text-sage-700 rounded-xl border border-sage-200 hover:bg-sage-50 hover:shadow-md flex items-center justify-center space-x-2 font-medium transition-all duration-200 text-sm sm:text-base"
           >
-            <RotateCcw className="w-5 h-5" />
+            <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
             <span>Reset</span>
           </button>
         </div>
@@ -289,29 +304,34 @@ export const Calculations: React.FC = () => {
       
       {/* Results Section */}
       {isCalculated && results && (
-        <div className="mt-6 p-4 bg-gradient-to-r from-primary-50 to-accent-50 rounded-lg">
-          <h3 className="text-lg font-medium text-sage-800 mb-4">Risultati</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-sage-600">BMI (Indice di Massa Corporea)</p>
-              <p className="text-lg font-bold text-sage-900">{results.bmi.toFixed(1)}</p>
-              <p className="text-xs text-sage-500">{getBmiCategory(results.bmi)}</p>
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 lg:p-8 border border-white/20 shadow-lg">
+          <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-accent-500 to-primary-500 rounded-lg flex items-center justify-center">
+              <Target className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
-            <div>
-              <p className="text-sm text-sage-600">Peso Ideale</p>
-              <p className="text-lg font-bold text-sage-900">{results.idealWeight.toFixed(1)} kg</p>
+            <h3 className="text-lg sm:text-xl font-bold text-sage-900">Risultati</h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="bg-gradient-to-br from-primary-50 to-accent-50 p-4 rounded-xl border border-primary-100">
+              <p className="text-sm text-sage-600 mb-1">BMI (Indice di Massa Corporea)</p>
+              <p className="text-xl sm:text-2xl font-bold text-sage-900">{results.bmi.toFixed(1)}</p>
+              <p className="text-xs text-sage-500 mt-1">{getBmiCategory(results.bmi)}</p>
             </div>
-            <div>
-              <p className="text-sm text-sage-600">Metabolismo Basale</p>
-              <p className="text-lg font-bold text-sage-900">{Math.round(results.basalMetabolism)} kcal</p>
+            <div className="bg-gradient-to-br from-accent-50 to-primary-50 p-4 rounded-xl border border-accent-100">
+              <p className="text-sm text-sage-600 mb-1">Peso Ideale</p>
+              <p className="text-xl sm:text-2xl font-bold text-sage-900">{results.idealWeight.toFixed(1)} kg</p>
             </div>
-            <div>
-              <p className="text-sm text-sage-600">Metabolismo Giornaliero</p>
-              <p className="text-lg font-bold text-sage-900">{Math.round(results.dailyMetabolism)} kcal</p>
+            <div className="bg-gradient-to-br from-primary-50 to-accent-50 p-4 rounded-xl border border-primary-100">
+              <p className="text-sm text-sage-600 mb-1">Metabolismo Basale</p>
+              <p className="text-xl sm:text-2xl font-bold text-sage-900">{Math.round(results.basalMetabolism)} kcal</p>
             </div>
-            <div>
-              <p className="text-sm text-sage-600">Deficit Giornaliero</p>
-              <p className="text-lg font-bold text-sage-900">{Math.round(results.dailyDeficit)} kcal</p>
+            <div className="bg-gradient-to-br from-accent-50 to-primary-50 p-4 rounded-xl border border-accent-100">
+              <p className="text-sm text-sage-600 mb-1">Metabolismo Giornaliero</p>
+              <p className="text-xl sm:text-2xl font-bold text-sage-900">{Math.round(results.dailyMetabolism)} kcal</p>
+            </div>
+            <div className="bg-gradient-to-br from-primary-50 to-accent-50 p-4 rounded-xl border border-primary-100">
+              <p className="text-sm text-sage-600 mb-1">Deficit Giornaliero</p>
+              <p className="text-xl sm:text-2xl font-bold text-sage-900">{Math.round(results.dailyDeficit)} kcal</p>
             </div>
             <div>
               <p className="text-sm text-sage-600">Deficit Settimanale</p>
