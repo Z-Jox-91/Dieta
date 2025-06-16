@@ -26,11 +26,17 @@ export const useTheme = () => {
 
       setIsDark(shouldBeDark);
       
+      // Applica immediatamente la classe dark con transizione fluida
+      const html = document.documentElement;
+      
       if (shouldBeDark) {
-        document.documentElement.classList.add('dark');
+        html.classList.add('dark');
       } else {
-        document.documentElement.classList.remove('dark');
+        html.classList.remove('dark');
       }
+      
+      // Forza il reflow per applicare immediatamente le transizioni CSS
+      html.offsetHeight;
     };
 
     updateTheme();

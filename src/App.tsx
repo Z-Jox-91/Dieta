@@ -128,15 +128,15 @@ function App() {
       />
 
       {/* Fixed controls */}
-      <div className="fixed top-4 right-4 z-30 flex flex-col gap-2">
+      <div className="floating-controls floating-controls-top">
         <OfflineStatus />
         {user && <UserLevel />}
       </div>
 
-      <div className="fixed bottom-4 right-4 z-30 flex flex-col gap-2">
-        <ThemeToggle />
-        <AccessibilityButton />
-        {user && <NotificationButton />}
+      <div className="floating-controls floating-controls-bottom">
+        <ThemeToggle className="floating-button" />
+        <AccessibilityButton className="floating-button" />
+        {user && <NotificationButton className="floating-button" />}
       </div>
 
       <Header user={user} onLogout={handleLogout} />

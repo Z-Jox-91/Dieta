@@ -46,43 +46,44 @@ export const AccessibilityPanel: React.FC<AccessibilityPanelProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+            className="modal-overlay"
             onClick={onClose}
-          />
-
-          {/* Panel */}
-          <motion.div
-            initial={{ opacity: 0, x: 300 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 300 }}
-            transition={{ type: 'spring', damping: 25 }}
-            className="fixed top-0 right-0 h-full w-full max-w-md bg-white dark:bg-gray-800 shadow-xl z-50 overflow-y-auto"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="accessibility-title"
-            onKeyDown={handleKeyDown}
           >
-            <div className="p-6 space-y-6">
-              <div className="flex items-center justify-between">
+            {/* Panel */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ type: 'spring', damping: 25 }}
+              className="modal-panel"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="accessibility-title"
+              onKeyDown={handleKeyDown}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-header">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
                     <Accessibility className="w-6 h-6 text-primary-600 dark:text-primary-400" />
                   </div>
                   <h2
                     id="accessibility-title"
-                    className="text-xl font-semibold text-gray-900 dark:text-white"
+                    className="text-xl font-semibold text-primary dark:text-white"
                   >
                     Impostazioni Accessibilità
                   </h2>
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="modal-close"
                   aria-label="Chiudi pannello accessibilità"
                 >
-                  <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  <X className="w-6 h-6 text-secondary dark:text-gray-400" />
                 </button>
               </div>
+              
+              <div className="p-6 space-y-6">
 
               <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
                 <div className="space-y-6">
@@ -228,7 +229,8 @@ export const AccessibilityPanel: React.FC<AccessibilityPanelProps> = ({
                   Queste impostazioni vengono salvate automaticamente e si applicano a tutte le pagine dell'applicazione.
                 </p>
               </div>
-            </div>
+              </div>
+            </motion.div>
           </motion.div>
         </>
       )}
@@ -252,22 +254,12 @@ export const AccessibilityButton: React.FC<{ className?: string }> = ({ classNam
     <>
       <motion.button
         onClick={openPanel}
-        className={`
-          flex items-center gap-2 px-3 py-2 rounded-lg
-          bg-gray-100 dark:bg-gray-800
-          hover:bg-gray-200 dark:hover:bg-gray-700
-          transition-colors duration-200
-          focus:outline-none focus:ring-2 focus:ring-primary-500
-          ${className}
-        `}
+        className={className || 'floating-button'}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         aria-label="Apri impostazioni accessibilità"
       >
         <Accessibility className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Accessibilità
-        </span>
       </motion.button>
 
       <AccessibilityPanel isOpen={isOpen} onClose={closePanel} />

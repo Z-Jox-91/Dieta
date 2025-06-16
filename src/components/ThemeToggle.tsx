@@ -37,15 +37,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
       
       <motion.button
         onClick={handleToggle}
-        className={`
-          relative flex items-center justify-center
-          w-10 h-10 rounded-lg
-          bg-gray-100 dark:bg-gray-800
-          border border-gray-200 dark:border-gray-700
-          hover:bg-gray-200 dark:hover:bg-gray-700
-          transition-colors duration-200
-          focus:outline-none focus:ring-2 focus:ring-primary-500
-        `}
+        className={className || 'floating-button'}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         aria-label={`Cambia tema (attuale: ${themes[currentThemeIndex].label})`}
