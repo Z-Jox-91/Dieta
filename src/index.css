@@ -271,6 +271,75 @@
   }
 }
 
+/* Controlli flottanti */
+@layer utilities {
+  .floating-controls {
+    @apply fixed z-40 pointer-events-none;
+  }
+
+  .floating-controls-top {
+    @apply top-4 right-4;
+  }
+
+  .floating-controls-bottom {
+    @apply bottom-4 right-4;
+  }
+
+  .floating-button {
+    @apply relative flex items-center justify-center w-12 h-12 rounded-full;
+    @apply bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm;
+    @apply border border-gray-200 dark:border-gray-700;
+    @apply shadow-lg hover:shadow-xl;
+    @apply transition-all duration-200;
+    @apply pointer-events-auto;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500;
+  }
+
+  .floating-button:hover {
+    @apply bg-white dark:bg-gray-700 scale-105;
+  }
+
+  /* Pannelli modali */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-40;
+    @apply flex items-end sm:items-center justify-center p-4;
+  }
+
+  .modal-panel {
+    @apply w-full max-w-md bg-white dark:bg-gray-800;
+    @apply rounded-t-xl sm:rounded-xl shadow-xl;
+    @apply max-h-[90vh] overflow-y-auto;
+  }
+
+  .modal-header {
+    @apply flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700;
+  }
+
+  .modal-close {
+    @apply p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700;
+    @apply transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500;
+  }
+}
+
+/* Media queries per mobile */
+@media (max-width: 640px) {
+  .floating-controls-top {
+    @apply top-2 right-2;
+  }
+
+  .floating-controls-bottom {
+    @apply bottom-2 right-2;
+  }
+
+  .floating-button {
+    @apply w-14 h-14;
+  }
+
+  .modal-panel {
+    @apply rounded-t-2xl sm:rounded-xl;
+  }
+}
+
 /* Stampa */
 @media print {
   @page {
@@ -281,7 +350,7 @@
     @apply text-black bg-white;
   }
 
-  .no-print {
+  .no-print, .floating-controls {
     @apply hidden;
   }
 

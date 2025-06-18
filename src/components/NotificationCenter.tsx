@@ -11,11 +11,10 @@ interface NotificationCenterProps {
 
 export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, onClose }) => {
   const {
-    settings: notificationSettings,
+    notificationSettings,
     requestPermission,
-    permission: permissionState,
-    isSupported,
-    updateSettings
+    permissionState,
+    cancelAllReminders
   } = useNotifications();
 
   const [localSettings, setLocalSettings] = useState(notificationSettings || defaultSettings); // Provide default settings if notificationSettings is undefined
@@ -44,7 +43,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
   }, [notificationSettings]);
 
   const handleSave = () => {
-    updateSettings(localSettings);
+    updateNotificationSettings(localSettings);
     toast.success('Impostazioni notifiche salvate');
     onClose();
   };
@@ -60,6 +59,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
       }
     } else {
       setLocalSettings({ ...localSettings, enabled: false });
+      cancelAllReminders();
       toast.success('Notifiche disabilitate');
     }
   };
@@ -79,15 +79,16 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+              className="modal-overlay"
               onClick={onClose}
-            />
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 50 }}
-              className="fixed bottom-0 inset-x-0 p-6 bg-white dark:bg-gray-800 rounded-t-xl shadow-xl z-50"
             >
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                className="modal-panel p-6"
+                onClick={(e) => e.stopPropagation()}
+              >
               <div className="flex flex-col items-center gap-4 text-center">
                 <BellOff className="w-12 h-12 text-gray-400" />
                 <h2 className="text-xl font-semibold">Notifiche non supportate</h2>
@@ -101,6 +102,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
                   Chiudi
                 </button>
               </div>
+              </motion.div>
             </motion.div>
           </>
         )}
@@ -116,21 +118,21 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+            className="modal-overlay"
             onClick={onClose}
-          />
-
-          <motion.div
-            initial={{ opacity: 0, y: 300 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 300 }}
-            transition={{ type: 'spring', damping: 25 }}
-            className="fixed bottom-0 inset-x-0 max-h-[80vh] overflow-y-auto bg-white dark:bg-gray-800 rounded-t-xl shadow-xl z-50"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="notification-title"
-            onKeyDown={handleKeyDown}
           >
+            <motion.div
+              initial={{ opacity: 0, y: 300 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 300 }}
+              transition={{ type: 'spring', damping: 25 }}
+              className="modal-panel max-h-[80vh] overflow-y-auto"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="notification-title"
+              onKeyDown={handleKeyDown}
+              onClick={(e) => e.stopPropagation()}
+            >
             <div className="sticky top-0 flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 z-10">
               <h2 id="notification-title" className="text-xl font-semibold flex items-center gap-2">
                 <Bell className="w-5 h-5 text-primary-600 dark:text-primary-400" />
@@ -407,6 +409,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
                 </div>
               )}
             </div>
+            </motion.div>
           </motion.div>
         </>
       )}
