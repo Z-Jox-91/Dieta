@@ -11,10 +11,11 @@ interface NotificationCenterProps {
 
 export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, onClose }) => {
   const {
-    notificationSettings,
+    settings: notificationSettings,
     requestPermission,
-    permissionState,
-    cancelAllReminders
+    permission: permissionState,
+    isSupported,
+    updateSettings
   } = useNotifications();
 
   const [localSettings, setLocalSettings] = useState(notificationSettings || defaultSettings); // Provide default settings if notificationSettings is undefined
@@ -43,7 +44,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
   }, [notificationSettings]);
 
   const handleSave = () => {
-    updateNotificationSettings(localSettings);
+    updateSettings(localSettings);
     toast.success('Impostazioni notifiche salvate');
     onClose();
   };
@@ -59,7 +60,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
       }
     } else {
       setLocalSettings({ ...localSettings, enabled: false });
-      cancelAllReminders();
       toast.success('Notifiche disabilitate');
     }
   };
@@ -112,27 +112,25 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="modal-overlay"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
             onClick={onClose}
+          />
+
+          <motion.div
+            initial={{ opacity: 0, y: 300 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 300 }}
+            transition={{ type: 'spring', damping: 25 }}
+            className="fixed bottom-0 inset-x-0 max-h-[80vh] overflow-y-auto bg-white dark:bg-gray-800 rounded-t-xl shadow-xl z-50"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="notification-title"
+            onKeyDown={handleKeyDown}
           >
-            {/* Panel */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ type: 'spring', damping: 25 }}
-              className="modal-panel"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="notification-title"
-              onKeyDown={handleKeyDown}
-              onClick={(e) => e.stopPropagation()}
-            >
             <div className="sticky top-0 flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 z-10">
               <h2 id="notification-title" className="text-xl font-semibold flex items-center gap-2">
                 <Bell className="w-5 h-5 text-primary-600 dark:text-primary-400" />
@@ -407,9 +405,8 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
                     </div>
                   </div>
                 </div>
-              )}}
+              )}
             </div>
-            </motion.div>
           </motion.div>
         </>
       )}
@@ -434,7 +431,14 @@ export const NotificationButton: React.FC<{ className?: string }> = ({ className
     <>
       <motion.button
         onClick={openPanel}
-        className={className || 'floating-button'}
+        className={`
+          flex items-center gap-2 px-3 py-2 rounded-lg
+          bg-gray-100 dark:bg-gray-800
+          hover:bg-gray-200 dark:hover:bg-gray-700
+          transition-colors duration-200
+          focus:outline-none focus:ring-2 focus:ring-primary-500
+          ${className}
+        `}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         aria-label="Apri centro notifiche"
@@ -444,6 +448,9 @@ export const NotificationButton: React.FC<{ className?: string }> = ({ className
         ) : (
           <BellOff className="w-5 h-5 text-gray-500 dark:text-gray-400" />
         )}
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          Notifiche
+        </span>
       </motion.button>
 
       <NotificationCenter isOpen={isOpen} onClose={closePanel} />

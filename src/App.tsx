@@ -21,6 +21,7 @@ interface User {
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
+  console.log('App.tsx: user state initialized', user);
   const [loading, setLoading] = useState(true);
   
   // Initialize hooks
@@ -33,8 +34,10 @@ function App() {
   useEffect(() => {
     // Simulated authentication check
     const savedUser = localStorage.getItem('bilanciamo_user');
+    console.log('App.tsx: useEffect - savedUser from localStorage', savedUser);
     if (savedUser) {
       const parsedUser = JSON.parse(savedUser);
+      console.log('App.tsx: useEffect - parsedUser', parsedUser);
       setUser(parsedUser);
       // Check daily login for gamification
       checkDailyLogin();
@@ -128,15 +131,15 @@ function App() {
       />
 
       {/* Fixed controls */}
-      <div className="floating-controls floating-controls-top">
+      <div className="fixed top-4 right-4 z-30 flex flex-col gap-2">
         <OfflineStatus />
         {user && <UserLevel />}
       </div>
 
-      <div className="floating-controls floating-controls-bottom">
-        <ThemeToggle className="floating-button" />
-        <AccessibilityButton className="floating-button" />
-        {user && <NotificationButton className="floating-button" />}
+      <div className="fixed bottom-4 right-4 z-30 flex flex-col gap-2">
+        <ThemeToggle />
+        <AccessibilityButton />
+        {user && <NotificationButton />}
       </div>
 
       <Header user={user} onLogout={handleLogout} />
