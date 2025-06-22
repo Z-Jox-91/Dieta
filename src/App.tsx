@@ -19,12 +19,10 @@ interface User {
   email: string;
 }
 
+import { useAuth } from './contexts/AuthContext';
+
 function App() {
-  const [user, setUser] = useState<User | null>(null);
-  console.log('App.tsx: user state initialized', user);
-  const [loading, setLoading] = useState(true);
-  
-  // Initialize hooks
+  const { user, login, logout, loading } = useAuth();
   const { theme } = useTheme();
   const { isOnline } = useOfflineStorage();
   const { checkDailyLogin } = useGamification();
@@ -32,54 +30,17 @@ function App() {
   const { requestPermission } = useNotifications();
 
   useEffect(() => {
-    try {
-      const savedUser = localStorage.getItem('bilanciamo_user');
-      if (savedUser) {
-        const parsedUser = JSON.parse(savedUser);
-        setUser(parsedUser);
-        checkDailyLogin();
-      }
-    } catch (error) {
-      console.error('Failed to parse user from localStorage', error);
-      localStorage.removeItem('bilanciamo_user');
-    } finally {
-      setLoading(false);
-    }
-  }, [checkDailyLogin]);
-
-  // Register service worker for PWA
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then((registration) => {
-          console.log('SW registered: ', registration);
-        })
-        .catch((registrationError) => {
-          console.log('SW registration failed: ', registrationError);
-        });
-    }
-  }, []);
-
-  // Request notification permission on first login
-  useEffect(() => {
     if (user) {
+      checkDailyLogin();
       requestPermission();
     }
-  }, [user, requestPermission]);
+  }, [user, checkDailyLogin, requestPermission]);
 
-  const handleLogin = (userData: User) => {
-    console.log('App.tsx: handleLogin - userData', userData);
-    setUser(userData);
-    localStorage.setItem('bilanciamo_user', JSON.stringify(userData));
-  };
-
-  const handleLogout = () => {
-    console.log('App.tsx: handleLogout');
-    setUser(null);
-    localStorage.removeItem('bilanciamo_user');
-    localStorage.removeItem('bilanciamo_calculations');
-    localStorage.removeItem('bilanciamo_meals');
-  };
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  }, []);
 
   if (loading) {
     return (
@@ -148,13 +109,13 @@ function App() {
         </div>
       </div>
 
-      <Header user={user} onLogout={handleLogout} />
+      <Header user={user} onLogout={logout} />
       
       <main className="container mx-auto px-4 py-8">
         {user ? (
           <Dashboard user={user} />
         ) : (
-          <Login onLogin={handleLogin} />
+          <Login onLogin={login} />
         )}
       </main>
     </div>
