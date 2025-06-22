@@ -32,17 +32,19 @@ function App() {
   const { requestPermission } = useNotifications();
 
   useEffect(() => {
-    // Simulated authentication check
-    const savedUser = localStorage.getItem('bilanciamo_user');
-    console.log('App.tsx: useEffect - savedUser from localStorage', savedUser);
-    if (savedUser) {
-      const parsedUser = JSON.parse(savedUser);
-      console.log('App.tsx: useEffect - parsedUser', parsedUser);
-      setUser(parsedUser);
-      // Check daily login for gamification
-      checkDailyLogin();
+    try {
+      const savedUser = localStorage.getItem('bilanciamo_user');
+      if (savedUser) {
+        const parsedUser = JSON.parse(savedUser);
+        setUser(parsedUser);
+        checkDailyLogin();
+      }
+    } catch (error) {
+      console.error('Failed to parse user from localStorage', error);
+      localStorage.removeItem('bilanciamo_user');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, [checkDailyLogin]);
 
   // Register service worker for PWA
