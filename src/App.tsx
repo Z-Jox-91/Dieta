@@ -149,7 +149,6 @@ function App() {
       <Header user={user} onLogout={handleLogout} />
       
       <main className="container mx-auto px-4 py-8">
-        {console.log('App.tsx: rendering Dashboard or Login, user:', user)}
         {user ? (
           <Dashboard user={user} />
         ) : (
